@@ -1,20 +1,17 @@
 import { PageTemplate } from "../lib/PageTemplate.js";
 
-class Page404 extends PageTemplate {
+
+class PageLogin extends PageTemplate {
     constructor() {
         super();
-        this.title = '404 | Server';
         
-       
     }
 
     mainHTML() {
         return `<div class = "row">
-                    <h1>404 page 🎅</h1>
+                    <h1>Login page 🎅</h1>
                  </div>`
-        
     }
-
 }
 
-export { Page404}
+export { PageLogin };

@@ -8,7 +8,9 @@ class PageHome extends PageTemplate {
     }
 
     mainHTML() {
-        return `<h1>Home page 🎅</h1>`
+        return `<div class = "row">
+                    <h1>Home page 🎅</h1>
+                 </div>`
     }
 }
 
