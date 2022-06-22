@@ -13,6 +13,7 @@
   "author": "Giedre",
   "license": "MIT",
   "devDependencies": {
+    "jest": "^28.1.1",
     "just": "^0.1.8",
     "nodemon": "^2.0.16"
   },
