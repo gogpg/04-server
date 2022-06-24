@@ -1,6 +1,9 @@
 ///Metodai, kurie gali patikrinti ar suvesti duomenys yra tinkami
 
-class IsValid {
+class IsValid {      ///tikrinimo klase ir metodai
+
+    ////FULLNAME\\\\\\
+
     static fullname(str) {
         if (str === undefined) {    ///jei nieko neivesta
             return [true, 'Neduotas parametras'];
@@ -53,11 +56,13 @@ class IsValid {
         return [false, 'OK'];
     }
 
+    ////////EMAI\\\\\\\\\\
+
     static email(str) {
         if (typeof str !== 'string') {    ////jei ivesta reiksme nera stringas.
             return [true, 'Netinkamas tipas, turi buti "string"'];  //rasta klaida. true.
         }
-        str = str.trim();
+        str = str.trim();  ///nutrimindami gautus vien tik tai tarpus, pamatome, kad nieko nebuvo irasyta. Jei buvo ivesta tik daug tarpu.
         if (str === '') {
             return [true, 'Neivestas email adresas'];
         }
@@ -81,8 +86,8 @@ class IsValid {
 
         const allowedSymbols = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.';
 
-        if (locale[0] === '.'      //negali prasideti tasku ir negali prasideti skaiciumi
-            || !isNaN(+locale[0])) {
+        if (locale[0] === '.'      //negali prasideti tasku ir negali prasideti skaiciumi, pirma eilute pagauna klaida, jei prasideda su tasku emailas.
+            || !isNaN(+locale[0])) {   ///antra eilute jeigu, arba prasideda skaiciumi. Klaida.
             return [true, 'El pastas turi prasideti raide'];
         }
         for (const symbol of locale) {
@@ -110,6 +115,8 @@ class IsValid {
         return [false, 'OK'];
     }
 
+    ///////PASWORD\\\\\\
+
     static password(str) {
         const minPasswordLength = 12;
 
@@ -135,3 +142,49 @@ IsValid.fullname('petras Petraitis')
 IsValid.fullname('Petras PetraitiS')  
 
 IsValid.fullname('Petras Petraitis')*/ //nebera klaidos [false, 'ok'] Yra klaida? false -klaidos nera.
+
+///////////ISAISKINIMAS 90 EILUTES\\\\\\
+
+//petras@mail.com    //petras-locale dalis, mail.com-domain dalis. Geras email variantas.
+
+//1petras@mail.com  //blogas variantas, prasideda skaiciumi.
+//.petras@mail.com  //blogas email varianatas, prasideda su tasku
+
+/*if (locale[0] === '.'      //negali prasideti tasku ir negali prasideti skaiciumi, pirma eilute pagauna klaida, jei prasideda su tasku emailas.
+|| !isNaN(+locale[0])) {   ///antra eilute jeigu, arba prasideda skaiciumi. Klaida.
+return [true, 'El pastas turi prasideti raide'];
+
++'a' gausiu NaN
++'1' gausiu 1          //+zenklas pakeicia skaiciu, kuris iyra stringas i skaicius, kuris yra number. Pakeicia tipa.
+                       //jeigu stringe minusinis skaicius, tai jo tipa pakeicia ne pliusas, o minusas priekyje.
+parseInt('1') gaunu 1   //taip pat kakeicia skaiciaus tipa is stringo i number.
+
+parseInt('1asd') gausiu 1; Skaito iki artimiausio ne skaiciaus ir ka randa ta atiduoda.
+parseInt('asd') gausiu NaN; Nepavyko rasti jokio skaiciaus.
+
++'1asd' gausiu NaN;
+
+
+1petras@mail.com        ///tikriname email su skaiciumi priekyje.
+!isNaN(+locale[0])     ///is pradziu turime tokia eilute
+!isNaN(+1petras[0])    //isistato locale reiksme
+!isNaN(+'1')           //is stringo pirma reiksme yra '1'
+!isNaN(1)              //pliusas pakeicia tipa is stringo i number
+!false              //kai isNaN paklausia ar vienetas yra NaN, grazina atsakyma false
+true                //sauktukas !false yra true. Randama klaida.
+
+petras@mail.com        ///tikriname email be skaiciaus priekyje.
+!isNaN(+locale[0])     ///is pradziu turime tokia eilute
+!isNaN(+petras[0])    //isistato locale pirmo simbolio reiksme
+!isNaN(+'p')           //is stringo pirma reiksme yra 'p'
+!isNaN(NaN)              //pliusas pakeicia tipa is stringo i number, nera skaiciaus, gauname NaN;
+!true             //kai isNaN paklausia ar NaN yra NaN, grazina atsakyma true
+true                //sauktukas !true yra false. Klaidos nerandame.*/
+
+
+
+
+
+
+
+

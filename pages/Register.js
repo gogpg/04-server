@@ -10,12 +10,13 @@ class PageRegister extends PageTemplate {
 
     mainHTML() {
 
-        const isDev = config.name === 'dev';
+        const isDev = config.name === 'dev';   ///kodas - objektas atsiranda tik developmente. Prod jo nera.
+
         const formValues = {
-            fullname: isDev ? 'Chuck Norris' : '',
+            fullname: isDev ? 'Chuck Norris' : '',       //jeigu developmente, tada automatiskai isiraso reiksmes, jei prodaction, tada inputai tusti.
             email: isDev ? 'chuck@norris.com' : '',
             pass: isDev ? 'chucknorrischucknorris' : '',
-            repass: isDev ? 'chucknorrischucknorris2' : '',
+            repass: isDev ? 'chucknorrischucknorris' : '',
         }
 
         return `<div class="row">
