@@ -1,7 +1,7 @@
 import { PageTemplate } from "../lib/PageTemplate.js";
 
 
-class PageHome extends PageTemplate {
+class PageAccount extends PageTemplate {
     constructor(data) {
         super(data);
         
@@ -9,9 +9,11 @@ class PageHome extends PageTemplate {
 
     mainHTML() {
         return `<div class = "row">
-                    <h1>Home page 🎅</h1>
+                    <h1>Account page 🎅</h1>
                  </div>`
     }
 }
 
-export { PageHome };
+export { PageAccount };
+
+

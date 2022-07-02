@@ -1,6 +1,6 @@
 const config = {};
 
-config.dev = {
+config.dev = {     ///developmento nustatymai
     name: 'dev',
     httpPort: 6969,
     passwordLength: 2,
@@ -17,7 +17,7 @@ config.dev = {
     }
 }
 
-config.prod = {
+config.prod = {    //prodaction nustatymai
     name: 'prod',
     httpPort: 42069,
     passwordLength: 12,
