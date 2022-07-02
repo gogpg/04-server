@@ -1,4 +1,4 @@
-///Metodai, kurie gali patikrinti ar suvesti duomenys yra tinkami
+///Metodai, kurie gali patikrinti ar suvesti duomenys yra tinkami. FRONTEND validation
 
 class IsValid {      ///tikrinimo klase ir metodai
 
