@@ -1,5 +1,5 @@
 const config = {};
-
+///nustatymai, kaip turi veikti projektas skirtingose salygose.
 config.dev = {     ///developmento nustatymai
     name: 'dev',
     httpPort: 6969,

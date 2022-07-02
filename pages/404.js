@@ -1,6 +1,6 @@
 import { PageTemplate } from "../lib/PageTemplate.js";
 
-class Page404 extends PageTemplate {
+class Page404 extends PageTemplate {/// ispleciame klase kitos klases pagrindu. paveldejimas.
     constructor(data) {
         super(data);
         this.title = '404 | Server';
