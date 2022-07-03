@@ -1,6 +1,6 @@
 const config = {};
-///nustatymai, kaip turi veikti projektas skirtingose salygose.
-config.dev = {     ///developmento nustatymai
+
+config.dev = {
     name: 'dev',
     httpPort: 6969,
     passwordLength: 2,
@@ -14,10 +14,11 @@ config.dev = {     ///developmento nustatymai
     cache: {
         default: 0,
         periods: {},
-    }
+    },
+    hashingSecret: '548efr525arf5d5a4f5fd4ad',
 }
 
-config.prod = {    //prodaction nustatymai
+config.prod = {
     name: 'prod',
     httpPort: 42069,
     passwordLength: 12,
@@ -42,11 +43,12 @@ config.prod = {    //prodaction nustatymai
             ttf: 60 * 60,
             otf: 60 * 60,
             eot: 60 * 60,
-            webmanifest60: 60 * 60 ,
+            webmanifest: 60 * 60,
             pdf: 60 * 60,
             json: 60 * 60,
         },
-    }
+    },
+    hashingSecret: '5t48gs5fres4g5fd2f64wt8g52g65t8wy4ey5htui4752r88e4fk5jdgr487fh51f5h84fk548trsg',
 }
 
 const nodeEnv = process.env.NODE_ENV;
