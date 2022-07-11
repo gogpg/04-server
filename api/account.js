@@ -90,7 +90,7 @@ handler._innerMethods.post = async (data, callback) => {
     delete payload.pass;
     payload.hashedPassword = utils.hash(pass)[1];
     payload.lastLoginDate = 0;
-    payload.registrationData = Date.now();
+    payload.registrationData = Date.now();  //milisekundem data, tos akimirkos laikas
     payload.browser = data.user.browser;
 
     const [createErr] = await file.create('accounts', email + '.json', payload);

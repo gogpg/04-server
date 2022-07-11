@@ -4,7 +4,7 @@ import { utils } from "../lib/utils.js";
 
 const handler = {};
 
-handler.account = async (data, callback) => {
+handler.token = async (data, callback) => {
     // kliento intensija - ka jis nori daryti?
     const acceptableMethods = ['get', 'post', 'put', 'delete'];
 
@@ -22,6 +22,71 @@ handler._innerMethods = {};
 
 // POST - sukuriame paskyra
 handler._innerMethods.post = async (data, callback) => {
+    const { payload } = data;
+
+    /*
+    1) patikrinti, ar teisinga info (payload):
+        - email
+        - pass
+        - isitikinti, jog atejusiame objekte nera kitu key's apart: email, fullname ir password
+    */
+
+    const [validErr, validMsg] = utils.objectValidator(payload, {
+        required: ['email', 'pass'],
+    });
+
+    if (validErr) {
+        return callback(400, {
+            msg: validMsg,
+        });
+    }
+
+    const { email, pass } = payload;
+
+    const [emailErr, emailMsg] = IsValid.email(email);
+    if (emailErr) {
+        return callback(400, {
+            msg: emailMsg,
+        });
+    }
+
+    const [passErr, passMsg] = IsValid.password(pass);
+    if (passErr) {
+        return callback(400, {
+            msg: passMsg,
+        });
+    }
+
+    // 2. Patikrinti ar egzistuoja account
+    const [readErr, readMsg] = await file.read('accounts', email + '.json');
+    if (readErr) {
+        return callback(400, {
+            msg: 'Vartotojas nerastas, arba neteisingas slaptazodis',
+        });
+    }
+
+    const [parseErr, userObject] = utils.parseJSONtoObject(readMsg);
+    if (parseErr) {
+        return callback(500, {
+            msg: 'Nepavyko atlikti vartotojo informacijos paieskos',
+        });
+    }
+
+    const [hashErr, hashedLoginPassword] = utils.hash(pass);
+    if (hashErr) {
+        return callback(500, {
+            msg: 'Nepavyko atlikti vartotojo informacijos paieskos',
+        });
+    }
+
+    if (hashedLoginPassword !== userObject.hashedPassword) {
+        return callback(400, {
+            msg: 'Vartotojas nerastas, arba neteisingas slaptazodis',
+        });
+    }
+
+    // 3. Suteikti prieiga prie sistemos
+
     return callback(200, {
         msg: 'Token sukurtas sekmingai',
     });
