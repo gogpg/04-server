@@ -38,32 +38,24 @@ handler._innerMethods.post = async (data, callback) => {
     });
 
     if (validErr) {
-        return callback(400, {
-            msg: validMsg,
-        });
+        return callback(400, ApiResponse.error(validMsg));
     }
 
     const { fullname, email, pass } = payload;
 
     const [fullnameErr, fullnameMsg] = IsValid.fullname(fullname);
     if (fullnameErr) {
-        return callback(400, {
-            msg: fullnameMsg,
-        });
+        return callback(400, ApiResponse.error(fullnameMsg));
     }
 
     const [emailErr, emailMsg] = IsValid.email(email);
     if (emailErr) {
-        return callback(400, {
-            msg: emailMsg,
-        });
+        return callback(400, ApiResponse.error(emailMsg));
     }
 
     const [passErr, passMsg] = IsValid.password(pass);
     if (passErr) {
-        return callback(400, {
-            msg: passMsg,
-        });
+        return callback(400, ApiResponse.error(passMsg));
     }
 
     /*
@@ -74,10 +66,8 @@ handler._innerMethods.post = async (data, callback) => {
 
     // accounts/${user-email}.json
     const [readErr] = await file.read('accounts', email + '.json');
-    if (!readErr) {             ///jeigu randa, kad toks vartotojas jau yra, gali perskaityti, vadinasi read error nera.
-        return callback(400, {
-            msg: 'Paskyra jau egzistuoja',
-        })
+    if (!readErr) {
+        return callback(400, ApiResponse.error('Paskyra jau egzistuoja'))
     }
 
     /*
@@ -90,19 +80,15 @@ handler._innerMethods.post = async (data, callback) => {
     delete payload.pass;
     payload.hashedPassword = utils.hash(pass)[1];
     payload.lastLoginDate = 0;
-    payload.registrationData = Date.now();  //milisekundem data, tos akimirkos laikas
+    payload.registrationData = Date.now();
     payload.browser = data.user.browser;
 
     const [createErr] = await file.create('accounts', email + '.json', payload);
     if (createErr) {
-        return callback(500, {
-            msg: 'Nepavyko sukurti paskyrtos del vidines serverio klaidos. Pabandykite veliau',
-        })
+        return callback(500, ApiResponse.error('Nepavyko sukurti paskyrtos del vidines serverio klaidos. Pabandykite veliau'))
     }
 
-    return callback(200, {
-        msg: 'Paskyra sukurta sekmingai',
-    });
+    return callback(201, ApiResponse.redirect('/login'));
 }
 
 // GET
@@ -114,9 +100,7 @@ handler._innerMethods.get = async (data, callback) => {
     // 2) Patikriname ar gautas email yra email formato
     const [emailErr, emailMsg] = IsValid.email(email);
     if (emailErr) {
-        return callback(400, {
-            msg: emailMsg,
-        });
+        return callback(400, ApiResponse.error(emailMsg));
     }
 
     // 3) Bandom perskaityti vartotojo duomenis
@@ -124,23 +108,17 @@ handler._innerMethods.get = async (data, callback) => {
     // - jei OK - vartotojas egzistuoja ir gavom jo duomenis
     const [readErr, readMsg] = await file.read('accounts', email + '.json');
     if (readErr) {
-        return callback(404, {
-            msg: 'Toks vartotojas neegzistuoja, arba nepavyko gauti duomenu del teisiu trukumo',
-        });
+        return callback(404, ApiResponse.error('Toks vartotojas neegzistouja, arba nepavyko gauti duomenu del teisiu trukumo'));
     }
 
     const [userErr, userData] = utils.parseJSONtoObject(readMsg);
     if (userErr) {
-        return callback(500, {
-            msg: 'Nepavyko nuskaityti duomenu',
-        });
+        return callback(500, ApiResponse.error('Nepavyko nuskaityti duomenu'));
     }
 
     delete userData.hashedPassword;
 
-    return callback(200, {
-        msg: userData,
-    });
+    return callback(200, ApiResponse.success(userData));
 }
 
 // PUT (kapitalinis info pakeistimas)
@@ -152,9 +130,7 @@ handler._innerMethods.put = async (data, callback) => {
 
     const [emailErr, emailMsg] = IsValid.email(email);
     if (emailErr) {
-        return callback(400, {
-            msg: emailMsg,
-        });
+        return callback(400, ApiResponse.error(emailMsg));
     }
 
     const [validErr, validMsg] = utils.objectValidator(payload, {
@@ -162,9 +138,7 @@ handler._innerMethods.put = async (data, callback) => {
     });
 
     if (validErr) {
-        return callback(400, {
-            msg: validMsg,
-        });
+        return callback(400, ApiResponse.error(validMsg));
     }
 
     const { fullname, pass } = payload;
@@ -172,33 +146,25 @@ handler._innerMethods.put = async (data, callback) => {
     if (fullname) {
         const [fullnameErr, fullnameMsg] = IsValid.fullname(fullname);
         if (fullnameErr) {
-            return callback(400, {
-                msg: fullnameMsg,
-            });
+            return callback(400, ApiResponse.error(fullnameMsg));
         }
     }
 
     if (pass) {
         const [passErr, passMsg] = IsValid.password(pass);
         if (passErr) {
-            return callback(400, {
-                msg: passMsg,
-            });
+            return callback(400, ApiResponse.error(passMsg));
         }
     }
 
     const [readErr, readMsg] = await file.read('accounts', email + '.json');
     if (readErr) {
-        return callback(404, {
-            msg: 'Toks vartotojas neegzistouja, arba nepavyko gauti duomenu del teisiu trukumo',
-        });
+        return callback(404, ApiResponse.error('Toks vartotojas neegzistouja, arba nepavyko gauti duomenu del teisiu trukumo'));
     }
 
     const [parseErr, userData] = utils.parseJSONtoObject(readMsg);
     if (parseErr) {
-        return callback(500, {
-            msg: 'Nepavyko atnaujinti paskyros informacijos, del vidines serverio klaidos',
-        });
+        return callback(500, ApiResponse.error('Nepavyko atnaujinti paskyros informacijos, del vidines serverio klaidos'));
     }
 
     if (fullname) {
@@ -211,14 +177,10 @@ handler._innerMethods.put = async (data, callback) => {
     const [updateErr] = await file.update('accounts', email + '.json', userData);
 
     if (updateErr) {
-        return callback(500, {
-            msg: 'Nepavyko atnaujinti paskyros informacijos, del vidines serverio klaidos',
-        });
+        return callback(500, ApiResponse.error('Nepavyko atnaujinti paskyros informacijos, del vidines serverio klaidos'));
     }
 
-    return callback(200, {
-        msg: 'Vartotojo informacija sekmingai atnaujinta',
-    });
+    return callback(200, ApiResponse.success('Vartotojo informacija sekmingai atnaujinta'));
 }
 
 // DELETE
@@ -229,23 +191,17 @@ handler._innerMethods.delete = async (data, callback) => {
     // 2) Patikriname ar gautas email yra email formato
     const [emailErr, emailMsg] = IsValid.email(email);
     if (emailErr) {
-        return callback(400, {
-            msg: emailMsg,
-        });
+        return callback(400, ApiResponse.error(emailMsg));
     }
 
     // 3) Trinam paskyra
     const [deleteErr] = await file.delete('accounts', email + '.json', userData);
 
     if (deleteErr) {
-        return callback(500, {
-            msg: 'Nepavyko istrinti paskyros informacijos, del vidines serverio klaidos',
-        });
+        return callback(500, ApiResponse.error('Nepavyko istrinti paskyros informacijos, del vidines serverio klaidos'));
     }
 
-    return callback(200, {
-        msg: 'Paskyra istrinta sekmingai',
-    });
+    return callback(200, ApiResponse.success('Paskyra istrinta sekmingai'));
 }
 
 export default handler;
