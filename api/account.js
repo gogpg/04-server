@@ -14,9 +14,7 @@ handler.account = async (data, callback) => {
         return await httpMethodFunc(data, callback);
     }
 
-    return callback(405, {
-        msg: 'Tavo norimas HTTPmethod yra nepalaikomas',
-    });
+    return callback(405, ApiResponse.error('Tavo norimas HTTPmethod yra nepalaikomas'));
 }
 
 handler._innerMethods = {};

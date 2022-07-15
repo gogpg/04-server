@@ -108,25 +108,29 @@ handler._innerMethods.post = async (data, callback) => {
 
 // GET
 handler._innerMethods.get = async (data, callback) => {
-    return callback(200, {
-        msgType: 'success',
-        msg: 'Token informacija',
-    });
+    return callback(200, ApiResponse.success('Token informacija'));
 }
 
 // PUT (kapitalinis info pakeistimas)
 handler._innerMethods.put = async (data, callback) => {
-    return callback(200, {
-        msgType: 'success',
-        msg: 'Token informacija sekmingai atnaujinta',
-    });
+    return callback(200, ApiResponse.success('Token informacija sekmingai atnaujinta'));
 }
 
 // DELETE
 handler._innerMethods.delete = async (data, callback) => {
-    return callback(200, {
-        msgType: 'success',
-        msg: 'Token istrintas sekmingai',
+    const cookies = [
+        'login-token=' + data.cookies['login-token'],
+        'path=/',
+        'domain=localhost',
+        'max-age=-1000',
+        'expires=Sun, 16 Jul 3567 06:23:41 GMT',
+        // 'Secure',
+        'SameSite=Lax',
+        'HttpOnly',
+    ];
+
+    return callback(200, ApiResponse.redirect('/'), {
+        'Set-Cookie': cookies.join('; '),
     });
 }
 

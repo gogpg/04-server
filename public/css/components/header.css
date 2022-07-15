@@ -2,11 +2,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-
 }
 
+.main-header > .logo {
+    height: 60px;
+}
 .main-header > nav {
     display: flex;
     gap: 20px;
-
 }

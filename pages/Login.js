@@ -1,4 +1,3 @@
-
 import { PageTemplate } from "../lib/PageTemplate.js";
 import config from '../config.js';
 
