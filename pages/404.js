@@ -1,20 +1,16 @@
 import { PageTemplate } from "../lib/PageTemplate.js";
 
-class Page404 extends PageTemplate {/// ispleciame klase kitos klases pagrindu. paveldejimas.
+class Page404 extends PageTemplate {
     constructor(data) {
         super(data);
         this.title = '404 | Server';
-        
-       
     }
 
     mainHTML() {
-        return `<div class = "row">
+        return `<div class="row">
                     <h1>404 page 🎅</h1>
-                 </div>`
-        
+                </div>`;
     }
-
 }
 
-export { Page404}
+export { Page404 };
